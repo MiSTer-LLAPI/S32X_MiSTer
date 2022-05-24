@@ -14,5 +14,6 @@ set_global_assignment -name VHDL_FILE rtl/CEGen.vhd
 set_global_assignment -name VHDL_FILE rtl/snd_mix.vhd
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/cofi.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/cheatcodes.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/llapi.sv
 set_global_assignment -name SDC_FILE S32X.sdc
 set_global_assignment -name SYSTEMVERILOG_FILE S32X.sv
