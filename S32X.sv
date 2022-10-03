@@ -20,6 +20,8 @@
 //  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //============================================================================
 
+//LLAPI: llapi.sv needs to be in rtl folder and needs to be declared in file.qip (set_global_assignment -name SYSTEMVERILOG_FILE rtl/llapi.sv)
+
 module emu
 (
 	//Master input clock
@@ -53,13 +55,14 @@ module emu
 	output        VGA_F1,
 	output [1:0]  VGA_SL,
 	output        VGA_SCALER, // Force VGA scaler
+	output        VGA_DISABLE, // analog out is off
 
 	input  [11:0] HDMI_WIDTH,
 	input  [11:0] HDMI_HEIGHT,
 	output        HDMI_FREEZE,
 
 `ifdef MISTER_FB
-	// Use framebuffer in DDRAM (USE_FB=1 in qsf)
+	// Use framebuffer in DDRAM
 	// FB_FORMAT:
 	//    [2:0] : 011=8bpp(palette) 100=16bpp 101=24bpp 110=32bpp
 	//    [3]   : 0=16bits 565 1=16bits 1555
@@ -186,6 +189,7 @@ assign LED_POWER = 0;
 assign LED_USER  = cart_download | sav_pending;
 
 assign VGA_SCALER= 0;
+assign VGA_DISABLE = 0;
 
 assign AUDIO_S = 1;
 assign AUDIO_MIX = 0;
@@ -244,7 +248,7 @@ video_freak video_freak
 // 0         1         2         3          4         5         6   
 // 01234567890123456789012345678901 23456789012345678901234567890123
 // 0123456789ABCDEFGHIJKLMNOPQRSTUV 0123456789ABCDEFGHIJKLMNOPQRSTUV
-// XXXXXXXXXXXX XXXXXXXXXXXXXXXXXXX XXXXXXXXXXXXX XXXXXXXXXX      XX
+// XXXXXXXXXXXX XXXXXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXXXX
 
 `include "build_id.v"
 localparam CONF_STR = {
@@ -691,6 +695,8 @@ always_comb begin
                 joystick_4 = joy_usb_4;
         end
 end
+
+//////////////////   END LLAPI   ///////////////////
 
 //Genesis
 wire [23:1] GEN_VA;
@@ -1577,7 +1583,7 @@ wire [7:0] SERJOYSTICK_OUT;
 wire [1:0] SER_OPT;
 
 always @(posedge clk_sys) begin
-	if (status[62]) begin
+	if (status[45]) begin
 		SERJOYSTICK_IN[0] <= USER_IN[1];//up
 		SERJOYSTICK_IN[1] <= USER_IN[0];//down	
 		SERJOYSTICK_IN[2] <= USER_IN[5];//left	
