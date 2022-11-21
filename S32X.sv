@@ -19,7 +19,6 @@
 //  with this program; if not, write to the Free Software Foundation, Inc.,
 //  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //============================================================================
-
 //LLAPI: llapi.sv needs to be in rtl folder and needs to be declared in file.qip (set_global_assignment -name SYSTEMVERILOG_FILE rtl/llapi.sv)
 
 module emu
@@ -295,8 +294,9 @@ localparam CONF_STR = {
 	"P2OIJ,Mouse,None,Port1,Port2;",
 	"P2OK,Mouse Flip Y,No,Yes;",
 	"P2-;",
+	//"P2oD,Serial,OFF,SNAC;",
 	//LLAPI: OSD menu item. swapped NONE with LLAPI. To detect LLAPI, status[63] = 1.
-        //LLAPI: Always double check witht the bits map allocation table to avoid conflicts
+    //LLAPI: Always double check witht the bits map allocation table to avoid conflicts
 	"P2oUV,Serial,OFF,SNAC,LLAPI;",
 	//LLAPI
 	"P2-;",
@@ -325,6 +325,7 @@ localparam CONF_STR = {
 
 wire [63:0] status;
 wire  [1:0] buttons;
+//wire [11:0] joystick_0,joystick_1,joystick_2,joystick_3,joystick_4;
 //LLAPI: Distinguish hps_io (usb) josticks from llapi joysticks
 wire [11:0] joy_usb_0, joy_usb_1, joy_usb_2, joy_usb_3, joy_usb_4;
 //LLAPI
@@ -360,6 +361,11 @@ hps_io #(.CONF_STR(CONF_STR), .WIDE(1)) hps_io
 	.clk_sys(clk_sys),
 	.HPS_BUS(HPS_BUS),
 
+	//.joystick_0(joystick_0),
+	//.joystick_1(joystick_1),
+	//.joystick_2(joystick_2),
+	//.joystick_3(joystick_3),
+	//.joystick_4(joystick_4),
 	//LLAPI : renamed hps_io (usb) joysticks
 	.joystick_0(joy_usb_0),
 	.joystick_1(joy_usb_1),
@@ -696,7 +702,7 @@ always_comb begin
         end
 end
 
-//////////////////   END LLAPI   ///////////////////
+//////////////////  END LLAPI   ///////////////////
 
 //Genesis
 wire [23:1] GEN_VA;
@@ -1602,14 +1608,14 @@ always @(posedge clk_sys) begin
 		USER_OUT[6] <= SERJOYSTICK_OUT[5];
 		USER_OUT[4] <= SERJOYSTICK_OUT[6];
 	//LLAPI: Connection to USER_OUT port
-        end else if (llapi_select) begin
-                USER_OUT[0] = llapi_latch_o;
-                USER_OUT[1] = llapi_data_o;
-                USER_OUT[2] = ~(llapi_select & ~OSD_STATUS); // LED on blister
-                USER_OUT[4] = llapi_latch_o2;
-                USER_OUT[5] = llapi_data_o2;
-                SER_OPT  <= 0;
-        //LLAPI
+    end else if (llapi_select) begin
+        USER_OUT[0] = llapi_latch_o;
+        USER_OUT[1] = llapi_data_o;
+        USER_OUT[2] = ~(llapi_select & ~OSD_STATUS); // LED on blister
+        USER_OUT[4] = llapi_latch_o2;
+        USER_OUT[5] = llapi_data_o2;
+        SER_OPT  <= 0;
+    //LLAPI
 	end else begin
 		SER_OPT  <= 0;
 		USER_OUT <= '1;
