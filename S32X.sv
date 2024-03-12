@@ -259,6 +259,12 @@ localparam CONF_STR = {
 	"O9,Auto Region,Header,Disabled;",
 	"D2ORS,Priority,US>EU>JP,EU>US>JP,US>JP>EU,JP>US>EU;",
 	"-;",
+	//LLAPI: OSD menu item
+	//LLAPI Always ON
+	"-,<< LLAPI enabled >>;",
+	"-,<< Use USER I/O port >>;",
+	"-;",
+	//END LLAPI	
 	/*
 	"C,Cheats;",
 	"H1OO,Cheats Enabled,Yes,No;",
@@ -298,7 +304,7 @@ localparam CONF_STR = {
 	//"P2oD,Serial,OFF,SNAC;",
 	//LLAPI: OSD menu item. swapped NONE with LLAPI. To detect LLAPI, status[63] = 1.
     //LLAPI: Always double check witht the bits map allocation table to avoid conflicts
-	"P2oUV,Serial,OFF,SNAC,LLAPI;",
+	//"P2oUV,Serial,OFF,SNAC,LLAPI;",
 	//LLAPI
 	"P2-;",
 	"P2o89,Gun Control,Disabled,Joy1,Joy2,Mouse;",
@@ -549,7 +555,7 @@ wire [71:0] llapi_analog, llapi_analog2;
 wire [7:0]  llapi_type, llapi_type2;
 wire llapi_en, llapi_en2;
 
-wire llapi_select = status[63];
+wire llapi_select = 1'b1;
 
 wire llapi_latch_o, llapi_latch_o2, llapi_data_o, llapi_data_o2;
 
@@ -675,7 +681,7 @@ always_comb begin
 	end
 end
 
-//Assign (DOWN + FIRST BUTTON) Combinaison to bring the OSD up - P1 and P1 ports.
+//Assign (DOWN + START + FIRST BUTTON) Combinaison to bring the OSD up - P1 and P2 ports.
 //TODO : Support long press detection
 wire llapi_osd = (llapi_buttons[26] & llapi_buttons[5] & llapi_buttons[0]) || (llapi_buttons2[26] & llapi_buttons2[5] & llapi_buttons2[0]);
 
