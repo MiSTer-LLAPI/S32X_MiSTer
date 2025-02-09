@@ -327,7 +327,7 @@ localparam CONF_STR = {
 
 wire [63:0] status;
 wire  [1:0] buttons;
-//wire [11:0] joystick_0,joystick_1,joystick_2,joystick_3,joystick_4;
+wire [11:0] joystick_0,joystick_1,joystick_2,joystick_3,joystick_4;
 //LLAPI: Distinguish hps_io (usb) josticks from llapi joysticks
 wire [11:0] joy_usb_0, joy_usb_1, joy_usb_2, joy_usb_3, joy_usb_4;
 //LLAPI
@@ -570,6 +570,7 @@ always_comb begin
 		USER_OUT[2] = OSD_STATUS; // Blister LED
 		USER_OUT[4] = llapi_latch_o2;
 		USER_OUT[5] = llapi_data_o2;
+		SER_OPT  <= 0;
 end
 
 //Port 1 conf
