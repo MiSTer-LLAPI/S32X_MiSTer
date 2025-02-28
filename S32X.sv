@@ -679,12 +679,27 @@ always_comb begin
                 joystick_2 = joy_usb_1;
                 joystick_3 = joy_usb_2;
                 joystick_4 = joy_usb_3;
-        end else begin
-                joystick_0 = joy_ll_a;
+				
+		end else if (use_llapi & ~use_llapi2)  begin
+               	joystick_0 = joy_ll_a;
+                joystick_1 = joy_usb_0;
+                joystick_2 = joy_usb_1;
+                joystick_3 = joy_usb_2;
+                joystick_4 = joy_usb_3;
+				
+		end else if (use_llapi & use_llapi2)  begin
+               	joystick_0 = joy_ll_a;
                 joystick_1 = joy_ll_b;
                 joystick_2 = joy_usb_0;
                 joystick_3 = joy_usb_1;
                 joystick_4 = joy_usb_2;
+				
+        end else begin
+                joystick_0 = 0;
+                joystick_1 = 0;
+                joystick_2 = 0;
+                joystick_3 = 0;
+                joystick_4 = 0;
 		end
 end
 
